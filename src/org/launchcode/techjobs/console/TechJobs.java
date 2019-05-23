@@ -2,6 +2,7 @@ package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,7 @@ public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -35,10 +36,10 @@ public class TechJobs {
 
             if (actionChoice.equals("list")) {
 
-                String columnChoice = getUserSelection("List", columnChoices);
+                String columnChoice = getUserSelection("List", columnChoices); //after we select 1 this shows the list of options
 
                 if (columnChoice.equals("all")) {
-                    printJobs(JobData.findAll());
+                    printJobs(JobData.findAll()); //go to method printJobs and return a list of each job listing
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
@@ -61,7 +62,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs((JobData.findByValue(searchTerm.toLowerCase())));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -103,7 +104,7 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
@@ -111,6 +112,17 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        if (someJobs.size() >= 1) { //if the entire size of the items in someJobs is = to 1; which it will be
+            for (int i = 0; i < someJobs.size(); i++) { // make i and if i is less than the size o/someJobs do ++
+
+                for (Map.Entry<String, String> aJob : someJobs.get(i).entrySet()) {
+                    System.out.println(aJob.getKey() + ":" + aJob.getValue());
+
+                }
+                System.out.println("*****");
+            }
+        } else {
+            System.out.println("We did not find any matches; please, try a different search ");
+        }
     }
 }
